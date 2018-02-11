@@ -38,7 +38,4 @@
 - (void)startObserving;
 - (void)stopObserving;
 
-- (void)addListener:(NSString *)eventName;
-- (void)removeListeners:(NSInteger)count;
-
 @end

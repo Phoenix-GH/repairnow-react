@@ -68,7 +68,7 @@ RCT_EXTERN void _RCTProfileBeginEvent(NSThread *calleeThread,
                                       NSTimeInterval time,
                                       uint64_t tag,
                                       NSString *name,
-                                      NSDictionary<NSString *, NSString *> *args);
+                                      NSDictionary *args);
 #define RCT_PROFILE_BEGIN_EVENT(tag, name, args) \
   do { \
     if (RCTProfileIsProfiling()) { \
@@ -104,7 +104,7 @@ RCT_EXTERN void _RCTProfileEndEvent(NSThread *calleeThread,
  */
 RCT_EXTERN NSUInteger RCTProfileBeginAsyncEvent(uint64_t tag,
                                                 NSString *name,
-                                                NSDictionary<NSString *, NSString *> *args);
+                                                NSDictionary *args);
 
 /**
  * The ID returned by BeginEvent should then be passed into EndEvent, with the
@@ -175,7 +175,7 @@ typedef struct {
 } systrace_arg_t;
 
 typedef struct {
-  char *(*start)(void);
+  void (*start)(uint64_t enabledTags, char *buffer, size_t bufferSize);
   void (*stop)(void);
 
   void (*begin_section)(uint64_t tag, const char *name, size_t numArgs, systrace_arg_t *args);

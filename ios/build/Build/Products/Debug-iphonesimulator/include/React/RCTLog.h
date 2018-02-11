@@ -11,7 +11,6 @@
 
 #import <React/RCTAssert.h>
 #import <React/RCTDefines.h>
-#import <React/RCTUtils.h>
 
 #ifndef RCTLOG_ENABLED
 #define RCTLOG_ENABLED 1

@@ -1,1 +1,10 @@
-import Auth0Sample from './app/index'
+/**
+ * Author: Moses Adekunle Esan for E&M Digital
+ * Date: 2/3/2017
+ * Project: React Native Redux Boilerplate
+ */
+
+import { AppRegistry } from 'react-native';
+import setup from './app/setup';
+
+AppRegistry.registerComponent('ReactReduxBoilerPlate', () => setup());

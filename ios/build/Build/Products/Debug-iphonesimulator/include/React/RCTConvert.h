@@ -112,14 +112,12 @@ typedef id NSPropertyList;
 
 typedef BOOL css_backface_visibility_t;
 + (YGOverflow)YGOverflow:(id)json;
-+ (YGDisplay)YGDisplay:(id)json;
 + (css_backface_visibility_t)css_backface_visibility_t:(id)json;
 + (YGFlexDirection)YGFlexDirection:(id)json;
 + (YGJustify)YGJustify:(id)json;
 + (YGAlign)YGAlign:(id)json;
 + (YGPositionType)YGPositionType:(id)json;
 + (YGWrap)YGWrap:(id)json;
-+ (YGDirection)YGDirection:(id)json;
 
 + (RCTPointerEvents)RCTPointerEvents:(id)json;
 + (RCTAnimationType)RCTAnimationType:(id)json;
@@ -208,17 +206,6 @@ RCT_CUSTOM_CONVERTER(type, name, [json getter])
 RCT_CUSTOM_CONVERTER(type, type, [RCT_DEBUG ? [self NSNumber:json] : json getter])
 
 /**
- * When using RCT_ENUM_CONVERTER in ObjC, the compiler is OK with us returning
- * the underlying NSInteger/NSUInteger. In ObjC++, this is a type mismatch and
- * we need to explicitly cast the return value to expected enum return type.
- */
-#ifdef __cplusplus
-#define _RCT_CAST(type, expr) static_cast<type>(expr)
-#else
-#define _RCT_CAST(type, expr) expr
-#endif
-
-/**
  * This macro is used for creating converters for enum types.
  */
 #define RCT_ENUM_CONVERTER(type, values, default, getter) \
@@ -229,7 +216,7 @@ RCT_CUSTOM_CONVERTER(type, type, [RCT_DEBUG ? [self NSNumber:json] : json getter
   dispatch_once(&onceToken, ^{                            \
     mapping = values;                                     \
   });                                                     \
-  return _RCT_CAST(type, [RCTConvertEnumValue(#type, mapping, @(default), json) getter]); \
+  return [RCTConvertEnumValue(#type, mapping, @(default), json) getter]; \
 }
 
 /**
@@ -244,7 +231,7 @@ RCT_CUSTOM_CONVERTER(type, type, [RCT_DEBUG ? [self NSNumber:json] : json getter
   dispatch_once(&onceToken, ^{                            \
     mapping = values;                                     \
   });                                                     \
-  return _RCT_CAST(type, [RCTConvertMultiEnumValue(#type, mapping, @(default), json) getter]); \
+  return [RCTConvertMultiEnumValue(#type, mapping, @(default), json) getter]; \
 }
 
 /**

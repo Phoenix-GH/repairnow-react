@@ -26,17 +26,6 @@ RCT_EXTERN dispatch_queue_t RCTGetUIManagerQueue(void);
 RCT_EXTERN char *const RCTUIManagerQueueName;
 
 /**
- * Check if we are currently on UIManager queue.
- */
-RCT_EXTERN BOOL RCTIsUIManagerQueue(void);
-
-/**
- * Convenience macro for asserting that we're running on UIManager queue.
- */
-#define RCTAssertUIManagerQueue() RCTAssert(RCTIsUIManagerQueue(), \
-@"This function must be called on the UIManager queue")
-
-/**
  * Posted right before re-render happens. This is a chance for views to invalidate their state so
  * next render cycle will pick up updated views and layout appropriately.
  */
@@ -59,8 +48,7 @@ RCT_EXTERN NSString *const RCTUIManagerDidRemoveRootViewNotification;
  */
 RCT_EXTERN NSString *const RCTUIManagerRootViewKey;
 
-@class RCTLayoutAnimationGroup;
-@class RCTUIManagerObserverCoordinator;
+@protocol RCTScrollableProtocol;
 
 /**
  * The RCTUIManager is the module responsible for updating the view hierarchy.
@@ -70,7 +58,7 @@ RCT_EXTERN NSString *const RCTUIManagerRootViewKey;
 /**
  * Register a root view with the RCTUIManager.
  */
-- (void)registerRootView:(UIView *)rootView;
+- (void)registerRootView:(UIView *)rootView withSizeFlexibility:(RCTRootViewSizeFlexibility)sizeFlexibility;
 
 /**
  * Gets the view name associated with a reactTag.
@@ -83,20 +71,6 @@ RCT_EXTERN NSString *const RCTUIManagerRootViewKey;
 - (UIView *)viewForReactTag:(NSNumber *)reactTag;
 
 /**
- * Gets the shadow view associated with a reactTag.
- */
-- (RCTShadowView *)shadowViewForReactTag:(NSNumber *)reactTag;
-
-/**
- * Set the available size (`availableSize` property) for a root view.
- * This might be used in response to changes in external layout constraints.
- * This value will be directly trasmitted to layout engine and defines how big viewport is;
- * this value does not affect root node size style properties.
- * Can be considered as something similar to `setSize:forView:` but applicable only for root view.
- */
-- (void)setAvailableSize:(CGSize)availableSize forRootView:(UIView *)rootView;
-
-/**
  * Set the size of a view. This might be in response to a screen rotation
  * or some other layout event outside of the React-managed view hierarchy.
  */
@@ -104,8 +78,7 @@ RCT_EXTERN NSString *const RCTUIManagerRootViewKey;
 
 /**
  * Set the natural size of a view, which is used when no explicit size is set.
- * Use `UIViewNoIntrinsicMetric` to ignore a dimension.
- * The `size` must NOT include padding and border.
+ * Use UIViewNoIntrinsicMetric to ignore a dimension.
  */
 - (void)setIntrinsicContentSize:(CGSize)size forView:(UIView *)view;
 
@@ -117,23 +90,10 @@ RCT_EXTERN NSString *const RCTUIManagerRootViewKey;
 - (void)setBackgroundColor:(UIColor *)color forView:(UIView *)view;
 
 /**
- * Sets up layout animation which will perform on next layout pass.
- * The animation will affect only one next layout pass.
- * Must be called on the main queue.
- */
-- (void)setNextLayoutAnimationGroup:(RCTLayoutAnimationGroup *)layoutAnimationGroup;
-
-/**
  * Schedule a block to be executed on the UI thread. Useful if you need to execute
  * view logic after all currently queued view updates have completed.
  */
 - (void)addUIBlock:(RCTViewManagerUIBlock)block;
-
-/**
- * Schedule a block to be executed on the UI thread. Useful if you need to execute
- * view logic before all currently queued view updates have completed.
- */
-- (void)prependUIBlock:(RCTViewManagerUIBlock)block;
 
 /**
  * Used by native animated module to bypass the process of updating the values through the shadow
@@ -154,16 +114,6 @@ RCT_EXTERN NSString *const RCTUIManagerRootViewKey;
  *
  */
 - (void)rootViewForReactTag:(NSNumber *)reactTag withCompletion:(void (^)(UIView *view))completion;
-
-/**
- * Finds a view that is tagged with nativeID as its nativeID prop
- * with the associated rootTag root tag view hierarchy. Returns the
- * view if found, nil otherwise.
- *
- * @param nativeID the id reference to native component relative to root view.
- * @param rootTag the react tag of root view hierarchy from which to find the view.
- */
-- (UIView *)viewForNativeID:(NSString *)nativeID withRootTag:(NSNumber *)rootTag;
 
 /**
  * The view that is currently first responder, according to the JS context.
@@ -187,12 +137,6 @@ RCT_EXTERN NSString *const RCTUIManagerRootViewKey;
  */
 - (void)setNeedsLayout;
 
-/**
- * Dedicated object for subscribing for UIManager events.
- * See `RCTUIManagerObserver` protocol for more details.
- */
-@property (atomic, retain, readonly) RCTUIManagerObserverCoordinator *observerCoordinator;
-
 @end
 
 @interface RCTUIManager (Deprecated)
@@ -204,14 +148,6 @@ RCT_EXTERN NSString *const RCTUIManagerRootViewKey;
  */
 - (void)setFrame:(CGRect)frame forView:(UIView *)view
 __deprecated_msg("Use `setSize:forView:` or `setIntrinsicContentSize:forView:` instead.");
-
-
-/**
- * This method is deprecated and will be removed in next releases.
- * Use `registerRootView:` instead. There is no need to specify `sizeFlexibility` anymore.
- */
-- (void)registerRootView:(UIView *)rootView withSizeFlexibility:(RCTRootViewSizeFlexibility)sizeFlexibility
-__deprecated_msg("Use `registerRootView:` instead.");
 
 @end
 

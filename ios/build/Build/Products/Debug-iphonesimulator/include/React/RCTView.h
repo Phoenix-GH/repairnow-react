@@ -41,11 +41,11 @@
 + (UIEdgeInsets)contentInsetsForView:(UIView *)curView;
 
 /**
- * Layout direction of the view.
- * This is inherited from UIView+React, but we override it here
- * to improve perfomance and make subclassing/overriding possible/easier.
+ * z-index, used to override sibling order in didUpdateReactSubviews. This is
+ * inherited from UIView+React, but we override it here to reduce the boxing
+ * and associated object overheads.
  */
-@property (nonatomic, assign) UIUserInterfaceLayoutDirection reactLayoutDirection;
+@property (nonatomic, assign) NSInteger reactZIndex;
 
 /**
  * This is an optimization used to improve performance

@@ -25,8 +25,6 @@
 
 - (instancetype)initWithDelegate:(id<RCTExceptionsManagerDelegate>)delegate;
 
-@property (nonatomic, weak) id<RCTExceptionsManagerDelegate> delegate;
-
 @property (nonatomic, assign) NSUInteger maxReloadAttempts;
 
 @end

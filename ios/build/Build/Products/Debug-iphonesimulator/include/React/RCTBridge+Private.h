@@ -7,16 +7,12 @@
  * of patent rights can be found in the PATENTS file in the same directory.
  */
 
-#import <JavaScriptCore/JSBase.h>
-
 #import <React/RCTBridge.h>
 
 @class RCTModuleData;
 @protocol RCTJavaScriptExecutor;
 
 RCT_EXTERN NSArray<Class> *RCTGetModuleClasses(void);
-
-RCT_EXTERN __attribute__((weak)) void RCTFBQuickPerformanceLoggerConfigureHooks(JSGlobalContextRef ctx);
 
 #if RCT_DEBUG
 RCT_EXTERN void RCTVerifyAllModulesExported(NSArray *extraModules);
@@ -27,7 +23,7 @@ RCT_EXTERN void RCTVerifyAllModulesExported(NSArray *extraModules);
 // Private designated initializer
 - (instancetype)initWithDelegate:(id<RCTBridgeDelegate>)delegate
                        bundleURL:(NSURL *)bundleURL
-                  moduleProvider:(RCTBridgeModuleListProvider)block
+                  moduleProvider:(RCTBridgeModuleProviderBlock)block
                    launchOptions:(NSDictionary *)launchOptions NS_DESIGNATED_INITIALIZER;
 
 // Used for the profiler flow events between JS and native
@@ -61,7 +57,7 @@ RCT_EXTERN void RCTVerifyAllModulesExported(NSArray *extraModules);
  * The block that creates the modules' instances to be added to the bridge.
  * Exposed for the RCTBatchedBridge
  */
-@property (nonatomic, copy, readonly) RCTBridgeModuleListProvider moduleProvider;
+@property (nonatomic, copy, readonly) RCTBridgeModuleProviderBlock moduleProvider;
 
 /**
  * Used by RCTDevMenu to override the `hot` param of the current bundleURL.
@@ -78,12 +74,6 @@ RCT_EXTERN void RCTVerifyAllModulesExported(NSArray *extraModules);
  * JS VM outside of React Native. Use with care!
  */
 @property (nonatomic, weak, readonly) id<RCTJavaScriptExecutor> javaScriptExecutor;
-
-/**
- * Used by RCTModuleData
- */
-
-@property (nonatomic, weak, readonly) RCTBridge *parentBridge;
 
 /**
  * Used by RCTModuleData
