@@ -1,5 +1,7 @@
 
-# Auth0 React Native Samples - Built by Nursultan Nurbolatov
+# Auth0 React Native/Redux Demo by Nursultan Nurbolatov
+
+- The app was built as a test project using React Native and Redux.
 
 # Installation
 
@@ -10,6 +12,6 @@ For more information: https://coolestguidesontheplanet.com/installing-node-js-on
 - On mac run git clone `https://github.com/flavorScript/repairnow-react` on terminal
 - run `cd repairnow-react`
 - run `npm install` 
-- run react-native run-ios
+- run `react-native run-ios`
 
 For more information: https://facebook.github.io/react-native/docs/getting-started.html
