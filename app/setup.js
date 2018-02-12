@@ -1,7 +1,7 @@
 /**
- * Author: Moses Adekunle Esan for E&M Digital
- * Date: 2/3/2017
- * Project: React Native Redux Boilerplate
+ * Author: Nursultan Nurbolatov
+ * Date: 2/11/2018
+ * Project: FlavorScript
  */
 
 import React, { Component } from 'react';
