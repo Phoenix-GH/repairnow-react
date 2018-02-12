@@ -57,6 +57,7 @@ class Home extends Component {
         })
         .catch(error => console.log(error));
     };
+
     _onLogout = () => {
       if (Platform.OS === 'android') {
         this.setState({ accessToken: null });
@@ -85,19 +86,6 @@ class Home extends Component {
           </View>
         );
     }
-
-    renderRow(rowData, sectionID, rowID) {
-        return (
-            <View style={styles.row}>
-                <Text style={styles.title}>
-                    {(parseInt(rowID) + 1)}{". "}{rowData.title}
-                </Text>
-                <Text style={styles.description}>
-                    {rowData.description}
-                </Text>
-            </View>
-        )
-    }
 };
 
 
@@ -123,35 +111,13 @@ function mapDispatchToProps(dispatch) {
 export default connect(mapStateToProps, mapDispatchToProps)(Home);
 
 var styles = StyleSheet.create({
-    activityIndicatorContainer:{
-        backgroundColor: "#fff",
-        alignItems: 'center',
-        justifyContent: 'center',
-        flex: 1
-    },
-
-    row:{
-        borderBottomWidth: 1,
-        borderColor: "#ccc",
-        // height: 50,
-        padding: 10
-    },
-
-    title:{
-        fontSize: 15,
-        fontWeight: "600"
-    },
-
-    description:{
-        marginTop: 5,
-        fontSize: 14,
-    },
     container: {
       flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
       backgroundColor: '#F5FCFF'
     },
+
     header: {
       fontSize: 20,
       textAlign: 'center',
